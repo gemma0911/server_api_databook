@@ -1,14 +1,21 @@
 import express from 'express'
 import addUser from '../controller/RegisterController';
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcrypt'
+import { check, validationResult } from 'express-validator';
+
 let route = express.Router();
 
 const loginR = (app) => {
-    route.post('/login', (req, res) => {
+    route.post('/login', [
+        check('email').isEmail(),
+        check('password').isLength({ min: 6 })
+    ], (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
-        const { email , password } = req.body
-        addUser(email,bcrypt.hash(password,10))
+        const { email, password } = req.body
+        addUser(email, password)
 
         res.send(JSON.stringify({
             success: true,
@@ -16,6 +23,7 @@ const loginR = (app) => {
             data: req.body,
         }))
     })
-    return app.use('/v1', route)
+
+    return app.use('/api', route)
 }
 export default loginR

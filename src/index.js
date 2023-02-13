@@ -7,9 +7,8 @@ app.use(express.json())
 
 loginR(app)
 
-
 app.get('/', (req, res) => {
-  con.query('SELECT * FROM user', function (err, rows) {
+   con.query('SELECT * FROM user', function (err,rows) {
     res.json(rows)
   })
 })
