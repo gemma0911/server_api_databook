@@ -1,7 +1,7 @@
 import express from 'express'
 import loginR from '../app/routes/RegisterRouter'
 import con from '../app/config/database'
-import loginController from '../app/controller/LoginController'
+import checkLogin from '../app/routes/LoginRouter'
 const app = express()
 const port = 3000
 app.use(express.json())
@@ -13,6 +13,8 @@ app.get('/', (req, res) => {
     res.json(rows)
   })
 })
+
+checkLogin(app)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

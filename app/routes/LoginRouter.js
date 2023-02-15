@@ -1,5 +1,5 @@
 import express from 'express'
-import addUser from '../controller/LoginController';
+import loginController from '../controller/LoginController';
 import { check, validationResult } from 'express-validator';
 
 let route = express.Router();
@@ -15,13 +15,19 @@ const checkLogin = (app) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { email, password } = req.body
+        const { email,password } = req.body
 
-        res.send(JSON.stringify({
-            success: true,
-            notice: "gửi yêu cầu đăng nhập",
-            data: req.body,
-        }))
+        if(loginController(email,password)){
+            res.send(JSON.stringify({
+                success: true,
+                notice: "oke đó",
+            }))
+        } else {
+            res.send(JSON.stringify({
+                success: true,
+                notice: "ko oke",
+            }))
+        }
     })
 
     return app.use('/api', route)
